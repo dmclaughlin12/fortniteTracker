@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FortniteTracker</string>
+    <string name="fortniteAPIKEY">TRN-Api-Key: b5354183-cbba-46e1-a191-96b00e96ba30</string>
 </resources>
