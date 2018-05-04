@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/save"
+        android:layout_height="40dp"
+        android:layout_width="100dp"
+        android:layout_gravity="center_horizontal"
+        android:title="Save"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/load"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:orderInCategory="100"
+        android:title="Load" />
+
+</menu>

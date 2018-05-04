@@ -1,15 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.dmclaughlin.fortnitetracker.MainActivity">
 
-    <Button
+    <TextView
+        android:id="@+id/userlabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TEST CLICK"
-        android:onClick="getFortniteStats"/>
+        android:layout_margin="16dp"
+        android:text="@string/username"
+        android:textSize="24sp"
+        />
 
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/userlabel"
+        android:layout_below="@+id/userlabel"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:textSize="36sp"
+        />
+
+    <RadioGroup
+        android:id="@+id/platform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="104dp"
+        tools:ignore="MissingConstraints">
+
+        <RadioButton
+            android:id="@+id/xbox_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@mipmap/xbox_icon"
+            ></RadioButton>
+
+        <RadioButton
+            android:id="@+id/playstation_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@mipmap/playstation_icon"
+            android:checked="true"
+            ></RadioButton>
+
+        <RadioButton
+            android:id="@+id/pc_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@mipmap/pc_icon"
+            android:checked="true"
+            ></RadioButton>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/createUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:onClick="getFortniteStats"
+        android:text="Submit"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="192dp"
+        tools:ignore="MissingConstraints" />
+</RelativeLayout>
