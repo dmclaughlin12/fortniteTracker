@@ -56,9 +56,12 @@
             android:id="@+id/pc_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/username"
+            android:layout_toEndOf="@+id/userlabel"
+            android:layout_weight="1"
             android:button="@mipmap/pc_icon"
-            android:checked="true"
-            ></RadioButton>
+            android:checked="true"></RadioButton>
+
     </RadioGroup>
 
     <Button
@@ -67,9 +70,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:onClick="getFortniteStats"
+        android:onClick="runFortniteStats"
         android:text="Submit"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="192dp"
         tools:ignore="MissingConstraints" />
+
 </RelativeLayout>

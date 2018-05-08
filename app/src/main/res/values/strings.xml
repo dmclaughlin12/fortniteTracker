@@ -4,4 +4,12 @@
     <string name="username">Username:</string>
     <string name="xbox">Xbox</string>
     <string name="playstation">Playstation</string>
+    <string name="rating_title">Rating</string>
+    <string name="rating" />
+    <string name="score_title">Score</string>
+    <string-array name="gametypes_array">
+        <item id="soloItem">Solo</item>
+        <item id="duoItem">Duo</item>
+        <item id="squadItem">Squads</item>
+    </string-array>
 </resources>

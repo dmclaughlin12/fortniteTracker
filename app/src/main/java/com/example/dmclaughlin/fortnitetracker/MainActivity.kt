@@ -2,6 +2,11 @@ package com.example.dmclaughlin.fortnitetracker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,17 +21,21 @@ import com.squareup.moshi.Moshi
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
 
     val client = OkHttpClient()
     val TAG = "Main"
     var username: String = ""
     //default to pc, for safety
     var platform: String = "pc"
+    var mAccelerometer : Sensor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val sensorManager: SensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mAccelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         val radioGroup = findViewById<View>(R.id.platform) as RadioGroup
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -57,8 +66,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getFortniteStats(jsonString: String)
+    {
+        val playerStatsIntent = Intent(this, PlayerResultsActivity::class.java)
+        playerStatsIntent.putExtra("jsonStats", jsonString)
+        startActivity(playerStatsIntent)
+    }
+
     @SuppressLint("ShowToast")
-    fun getFortniteStats(view: View)
+    fun runFortniteStats(view: View)
     {
         val input = findViewById<View>(R.id.username) as EditText
         username = input.text.toString()
@@ -68,12 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
         //Connection info
         val url = "https://api.fortnitetracker.com/v1/profile/${platform}/${username}"
-        val jsonString = run(url)
-        Log.i(TAG, "Returned ${jsonString}")
-    }
 
-    private fun run(url: String) : String
-    {
         var responseJson : String = ""
         val request = Request.Builder()
                 .url(url)
@@ -90,24 +101,23 @@ class MainActivity : AppCompatActivity() {
                 {
                     Log.e(TAG, "Response was not successful : ${response}")
                 }
-
                 val responseData = response.body()?.string()
-                val moshi = Moshi.Builder()
-                        .add(KotlinJsonAdapterFactory())
-                        .build()
 
-                val fortniteStatsAdapter = moshi.adapter(FortniteStatsVO::class.java)
-                val fortniteStatsDTO = fortniteStatsAdapter.fromJson(responseData)
-
-                this@MainActivity.runOnUiThread(java.lang.Runnable {
-                    fun run(){
-
-                    }
-                })
+                if (responseData != null) {
+                    getFortniteStats(responseData)
+                }
             }
         })
+    }
 
-        return responseJson
+    //Sensor stuff
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+
     }
 
 }
+
