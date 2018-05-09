@@ -25,6 +25,11 @@ class PlayerResultsActivity : AppCompatActivity(), SensorEventListener {
     var fortniteJson : String? = null
     var senManager : SensorManager? = null
     var senAccelerometer : Sensor? = null
+    var lastUpdate = 0
+    val THRESHOLD = 600
+    var last_x : Float = 0F
+    var last_y : Float = 0F
+    var last_z : Float = 0F
 
     companion object {
         var userDatabase : UserDatabase? = null
@@ -169,19 +174,46 @@ class PlayerResultsActivity : AppCompatActivity(), SensorEventListener {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    //https://code.tutsplus.com/tutorials/using-the-accelerometer-on-android--mobile-22125
     override fun onSensorChanged(event: SensorEvent?) {
         var sensor = event!!.sensor
+        var diffTime : Long
 
         if(sensor.type == Sensor.TYPE_ACCELEROMETER)
         {
-//            var x = event.values[0]
-//            var y = event.values[1]
-//            var z = event.values[2]
-//
-//            var currentTime = SystemClock.currentThreadTimeMillis()
+            var x = event.values[0]
+            var y = event.values[1]
+            var z = event.values[2]
 
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            var currentTime = SystemClock.currentThreadTimeMillis()
+            diffTime = currentTime - lastUpdate
+            if(diffTime> 100)
+            {
+                diffTime = currentTime
+                var speed = (Math.abs(x + y + z - last_x - last_y - last_z) / diffTime) * 100
+                if(speed > 1)
+                {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+
+                last_x = x
+                last_y = y
+                last_z = z
+            }
+
+
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        senManager!!.unregisterListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        senManager!!.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 }
