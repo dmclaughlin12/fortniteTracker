@@ -1,8 +1,15 @@
 package com.example.dmclaughlin.fortnitetracker
 
 import android.arch.persistence.room.Room
+import android.content.Context
+import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
@@ -12,10 +19,13 @@ import com.example.dmclaughlin.fortnitetracker.vo.FortniteStatsVO
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 
-class PlayerResultsActivity : AppCompatActivity() {
+class PlayerResultsActivity : AppCompatActivity(), SensorEventListener {
 
     var fortniteStatsDTO: FortniteStatsVO? = null
     var fortniteJson : String? = null
+    var senManager : SensorManager? = null
+    var senAccelerometer : Sensor? = null
+
     companion object {
         var userDatabase : UserDatabase? = null
     }
@@ -23,8 +33,13 @@ class PlayerResultsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PlayerResultsActivity.userDatabase = Room.databaseBuilder(this, UserDatabase::class.java, "user-db").allowMainThreadQueries().build()
-
         setContentView(R.layout.player_stats_layout)
+
+        //Sensor
+        senManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        senAccelerometer = senManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        senManager!!.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+
 
         val spinner: Spinner = findViewById(R.id.spinner)
         val spinnerArray: ArrayAdapter<CharSequence> =
@@ -148,5 +163,25 @@ class PlayerResultsActivity : AppCompatActivity() {
     private fun getSavedUsers() : List<UserEntity>
     {
         return PlayerResultsActivity.userDatabase!!.userDao().getAllUsers()
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        var sensor = event!!.sensor
+
+        if(sensor.type == Sensor.TYPE_ACCELEROMETER)
+        {
+//            var x = event.values[0]
+//            var y = event.values[1]
+//            var z = event.values[2]
+//
+//            var currentTime = SystemClock.currentThreadTimeMillis()
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
